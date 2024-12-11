@@ -19,6 +19,7 @@ const bcrypt=require('bcrypt');
 const userRouter=require('./routes/users');
 
 
+
 const app=express(); 
 const server=http.createServer(app);
 const io=new Server(server,{
@@ -67,7 +68,7 @@ cloudinary.config({
 })
 
 
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI);
 const db=mongoose.connection
 db.on('error',(error)=> console.error(error))
 db.once('open', ()=>console.log("MongoDb connected"))
@@ -103,7 +104,6 @@ const storage = new CloudinaryStorage({
 
 
 const upload=multer({storage:storage});
-
 
 app.post('/signup',upload.single('avatar'), async(req, res) => {
     console.log(req.body)
@@ -178,8 +178,6 @@ app.get('/profile', async(req,res)=>{
 });
 
 
-
-
 app.post('/upload',upload.single('file'),(req,res)=>{
 
     //console.log(req.file);
@@ -200,7 +198,7 @@ app.post('/upload',upload.single('file'),(req,res)=>{
         userName:userName
     })
     .then((result)=>{
-        //console.log("Post created: ",result);
+        //console.log("Post created: ",result):
         res.status(201).json(result);
     })
     .catch((err)=>console.log(err))
