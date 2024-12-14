@@ -12,7 +12,7 @@ function UserList() {
       const token = localStorage.getItem('token');
 
       try {
-        const response = await axios.get('http://localhost:3000/users', {
+        const response = await axios.get('https://social-media-app-kamd.onrender.com/users', {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -22,7 +22,7 @@ const Profile = () => {
     const fetchPosts = async () => {
       const token = localStorage.getItem('token');
       try {
-        const response = await axios.get('http://localhost:3000/poster', {
+        const response = await axios.get('https://social-media-app-kamd.onrender.com/poster', {
           headers: { Authorization: `Bearer ${token}` },
         });
         setPost(response.data);
@@ -42,7 +42,7 @@ const Profile = () => {
     setListType(type);
     const endpoint = type === 'followers' ? 'followers' : 'following';
     try {
-      const response = await axios.get(`http://localhost:3000/profile/${endpoint}`, {
+      const response = await axios.get(`https://social-media-app-kamd.onrender.com/profile/${endpoint}`, {
         params: { askedUser: loggedInUser.userName },
       });
       setUserList(response.data[type]);
@@ -65,7 +65,7 @@ const Profile = () => {
   const handleDeletePost = async (postId) => {
     const token = localStorage.getItem('token');
     try {
-      await axios.delete(`http://localhost:3000/posts/${postId}`, {
+      await axios.delete(`https://social-media-app-kamd.onrender.com/posts/${postId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setPost((prevPosts) => prevPosts.filter((p) => p._id !== postId));

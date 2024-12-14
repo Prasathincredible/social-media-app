@@ -11,7 +11,7 @@ function Messages() {
   useEffect(() => {
     const fetchConversations = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/conversations/convos`, {
+        const response = await axios.get(`https://social-media-app-kamd.onrender.com/conversations/convos`, {
           params: { user: loggedInUser.userName },
         });
         setConversations(response.data);

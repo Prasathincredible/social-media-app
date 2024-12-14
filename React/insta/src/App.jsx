@@ -17,7 +17,6 @@ import { UserProvider } from './contexts/UserContext';
 import Messages from './Components/Messages';
 
 
-
 function App() {
 
   return (
@@ -40,9 +39,7 @@ function App() {
         <Route path='/chat/:userName' element={<Chat/>}/>
       </Routes>  
       </UserProvider>
-    </div>
-  
-    
+    </div> 
   );
 }
 

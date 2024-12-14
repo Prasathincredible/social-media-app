@@ -22,13 +22,11 @@ const UserProfile = () => {
     fetchProfile();
   }, [userName]);
 
-  useEffect(() => {
-    fetchPosts();
-  }, [userName]);
+
 
   const fetchProfile = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/users/${userName}`);
+      const response = await axios.get(`https://social-media-app-kamd.onrender.com/users/${userName}`);
       setProfile(response.data);
       setIsFollowing(loggedInUser?.following.includes(response.data.userName));
     } catch (error) {
@@ -36,9 +34,14 @@ const UserProfile = () => {
     }
   };
 
+  useEffect(() => {
+    fetchPosts();
+  }, [userName]);
+  
+
   const fetchPosts = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/users/${userName}/posts`);
+      const response = await axios.get(`https://social-media-app-kamd.onrender.com/users/${userName}/posts`);
       setPosts(response.data);
     } catch (error) {
       console.log('Error fetching user posts', error);
@@ -47,7 +50,7 @@ const UserProfile = () => {
 
   const fetchUserList = async (type) => {
     try {
-      const endpoint = `http://localhost:3000/profile/${type}`;
+      const endpoint = `https://social-media-app-kamd.onrender.com/profile/${type}`;
       const response = await axios.get(endpoint, {
         params: { askedUser: profile.userName },
       });
@@ -63,7 +66,7 @@ const UserProfile = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        'http://localhost:3000/follow',
+        'https://social-media-app-kamd.onrender.com/follow',
         { followId: profile.userName },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -78,7 +81,7 @@ const UserProfile = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        'http://localhost:3000/unfollow',
+        'https://social-media-app-kamd.onrender.com/unfollow',
         { unfollowId: profile.userName },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -101,13 +104,13 @@ const UserProfile = () => {
     const sender = loggedInUser.userName;
     const receiver = profile.userName;
     try {
-      const response = await axios.get('http://localhost:3000/conversations', {
+      const response = await axios.get('https://social-media-app-kamd.onrender.com/conversations', {
         params: { sender, receiver },
       });
       if (response.data.length > 0) {
         navigate(`/chat/${receiver}`);
       } else {
-        await axios.post('http://localhost:3000/conversations', {
+        await axios.post('https://social-media-app-kamd.onrender.com/conversations', {
           sender,
           receiver,
           lastMessage: '',

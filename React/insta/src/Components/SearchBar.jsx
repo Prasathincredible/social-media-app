@@ -11,7 +11,7 @@ function SearchBar() {
         e.preventDefault();
 
         try {
-            const res = await axios.get(`http://localhost:3000/search?q=${query}`);
+            const res = await axios.get(`https://social-media-app-kamd.onrender.com/search?q=${query}`);
             setResults(res.data.users); // Assume API returns `users` array based on the query
         } catch (err) {
             console.log('Error fetching search results:', err);

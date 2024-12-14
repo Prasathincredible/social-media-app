@@ -44,13 +44,13 @@ function MenuPage() {
           <MessageIcon className="mr-0 sm:mr-2 text-gray-600" /> 
           <span className="sm:inline hidden text-gray-800">Messages</span>
         </Link>
-        <Link 
+        {/*<Link 
           to="/notifications" 
           className="flex flex-col sm:flex-row items-center text-gray-700 hover:text-blue-600 transition duration-200 p-3 rounded-lg 
                     hover:bg-gray-200">
           <NotificationsIcon className="mr-0 sm:mr-2 text-gray-600" /> 
           <span className="sm:inline hidden text-gray-800">Notifications</span>
-        </Link>
+        </Link>*/}
         <Link 
           to="/createpost" 
           className="flex flex-col sm:flex-row items-center text-gray-700 hover:text-blue-600 transition duration-200 p-3 rounded-lg 

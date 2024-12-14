@@ -21,7 +21,7 @@ export const UserProvider = ({ children }) => {
             }
 
             try {
-                const response = await axios.get('http://localhost:3000/profile', {
+                const response = await axios.get('https://social-media-app-kamd.onrender.com/profile', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

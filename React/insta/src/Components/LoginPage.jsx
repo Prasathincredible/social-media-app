@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Button } from '@mui/material';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 class LoginPage extends Component {
   constructor(props) {
@@ -12,6 +13,7 @@ class LoginPage extends Component {
       password: '',
       showModal: false, // To control modal visibility
       modalMessage: '',
+      redirectToHome: false, // Add state to track redirection
     };
   }
 
@@ -24,7 +26,7 @@ class LoginPage extends Component {
   submitHandler = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/api/login', this.state);
+      const response = await axios.post('https://social-media-app-kamd.onrender.com/api/login', this.state);
       const data = response.data;
       if (data.user) {
         this.setState({
@@ -33,11 +35,11 @@ class LoginPage extends Component {
         });
         localStorage.setItem('token', data.user);
         setTimeout(() => {
-          window.location.href = '/homepage';
-        }, 3000); // Redirect after 3 seconds
+          this.setState({ redirectToHome: true }); // Set state to redirect after success
+        }, 3000); // Wait for 3 seconds before redirecting
       } else {
         this.setState({
-          showModal: true, // Show modal on error too
+          showModal: true,
           modalMessage: 'Incorrect username or password. Please try again.',
         });
       }
@@ -60,7 +62,7 @@ class LoginPage extends Component {
 
     return (
       <div className="fixed top-0 left-0 right-0 z-50 flex justify-center">
-        <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full mt-4"> {/* Add mt-4 for spacing from the top */}
+        <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full mt-4">
           <h2 className="text-2xl font-bold text-center mb-4">Alert</h2>
           <p className="text-center text-gray-700 mb-6">{modalMessage}</p>
           <div className="text-center">
@@ -77,11 +79,14 @@ class LoginPage extends Component {
   }
 
   render() {
-    const { userName, password } = this.state;
+    const { userName, password, redirectToHome } = this.state;
+
+    if (redirectToHome) {
+      return <Navigate to="/homepage" />; // Use Navigate to redirect to homepage
+    }
 
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-200 to-green-100 flex flex-col justify-center items-center">
-        {/* Render Modal */}
         {this.renderModal()}
         <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full space-y-6">
           <h1 className="text-4xl font-bold text-center text-blue-600 mb-6">Login</h1>

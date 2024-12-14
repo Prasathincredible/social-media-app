@@ -25,7 +25,7 @@ function CreatePost() {
     formData.append('caption', caption);
     const token = localStorage.getItem('token');
 
-    axios.post('http://localhost:3000/upload', formData, {
+    axios.post('https://social-media-app-kamd.onrender.com/upload', formData, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "multipart/form-data"

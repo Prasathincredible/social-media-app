@@ -47,7 +47,7 @@ class SignUp extends Component {
     formData.append('avatar', this.state.avatar);
 
     try {
-      const response = await axios.post('http://localhost:3000/signup', formData, {
+      const response = await axios.post('https://social-media-app-kamd.onrender.com/signup', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

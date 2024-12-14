@@ -19,7 +19,7 @@ function NewsPage() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/allPosts', {
+        const res = await axios.get('https://social-media-app-kamd.onrender.com/allPosts', {
           params: { userId: loggedInUser._id },
         });
         const fetchedPosts = res.data.map(post => ({
@@ -39,7 +39,7 @@ function NewsPage() {
     const post = posts.find(post => post._id === postId);
     const alreadyLiked = post.isLikedByUser;
 
-    axios.post(`http://localhost:3000/posts/${postId}/like`, { userName: loggedInUser.userName })
+    axios.post(`https://social-media-app-kamd.onrender.com/posts/${postId}/like`, { userName: loggedInUser.userName })
       .then(() => {
         setPosts(posts.map(p => {
           if (p._id === postId) {
@@ -58,7 +58,7 @@ function NewsPage() {
   };
 
   const handleAddComment = (postId, comment) => {
-    axios.post(`http://localhost:3000/posts/${postId}/comment`, {
+    axios.post(`https://social-media-app-kamd.onrender.com/posts/${postId}/comment`, {
       userName: loggedInUser.userName,
       comment: comment,
     })

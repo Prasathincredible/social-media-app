@@ -4,7 +4,7 @@ import { UserContext } from '../contexts/UserContext';
 import axios from 'axios';
 import io from 'socket.io-client';
 
-const socket = io.connect('http://localhost:3000', {
+const socket = io.connect('https://social-media-app-kamd.onrender.com', {
   transports: ['websocket', 'polling']
 });
 
@@ -21,7 +21,7 @@ const Chat = () => {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/conversations/${loggedInUser.userName}/${receiverUserName}`);
+        const response = await axios.get(`https://social-media-app-kamd.onrender.com/conversations/${loggedInUser.userName}/${receiverUserName}`);
         setMessages(response.data);
       } catch (error) {
         console.log('Error fetching messages: ', error);
