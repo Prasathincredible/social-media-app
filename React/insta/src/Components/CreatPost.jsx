@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Button } from '@mui/material';
+import MenuPage from './MenuPage';
 
 function CreatePost() {
   const [file, setFile] = useState('');
@@ -53,6 +54,7 @@ function CreatePost() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-200 to-green-100 flex flex-col items-center justify-center py-8">
+      <MenuPage/>
       {showAlert && (
         <div className="fixed top-0 left-0 right-0 z-50 flex justify-center">
           <div className="bg-white rounded-lg shadow-lg p-4 max-w-sm w-full mt-4">

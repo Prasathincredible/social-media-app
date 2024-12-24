@@ -1,7 +1,8 @@
 import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../contexts/UserContext';
+import UserContext  from '../contexts/UserContext';
+import MenuPage from './MenuPage';
 
 function Messages() {
   const [conversations, setConversations] = useState([]);
@@ -27,7 +28,9 @@ function Messages() {
   };
 
   return (
+    
     <div className="flex flex-col items-center py-6">
+      <MenuPage/>
       <h1 className="text-2xl font-semibold mb-4">Conversations</h1>
       <ul className="w-full max-w-md">
         {conversations.map((conversation) => {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import { UserContext } from '../contexts/UserContext';
+import UserContext  from '../contexts/UserContext';
 import axios from 'axios';
 import io from 'socket.io-client';
 
@@ -21,7 +21,9 @@ const Chat = () => {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
+        console.log(loggedInUser)
         const response = await axios.get(`https://social-media-app-kamd.onrender.com/conversations/${loggedInUser.userName}/${receiverUserName}`);
+
         setMessages(response.data);
       } catch (error) {
         console.log('Error fetching messages: ', error);
@@ -123,4 +125,4 @@ const Chat = () => {
   );
 };
 
-export default Chat;
+export default Chat

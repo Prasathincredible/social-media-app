@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { UserContext } from '../contexts/UserContext';
+import UserContext from '../contexts/UserContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import MenuPage from './MenuPage';
@@ -22,8 +22,6 @@ const UserProfile = () => {
     fetchProfile();
   }, [userName]);
 
-
-
   const fetchProfile = async () => {
     try {
       const response = await axios.get(`https://social-media-app-kamd.onrender.com/users/${userName}`);
@@ -37,7 +35,6 @@ const UserProfile = () => {
   useEffect(() => {
     fetchPosts();
   }, [userName]);
-  
 
   const fetchPosts = async () => {
     try {
@@ -126,33 +123,33 @@ const UserProfile = () => {
   const renderMedia = (mediaUrl) => {
     if (!mediaUrl) return null;
     const fileExtension = mediaUrl.split('.').pop().toLowerCase();
-    
-    if (fileExtension === 'jpg' || fileExtension === 'jpeg' || fileExtension === 'png' || fileExtension === 'gif') {
+
+    if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)) {
       return <img src={mediaUrl} alt="media" className="w-full h-64 object-cover hover:opacity-90 transition-opacity duration-300" />;
     }
 
-    if (fileExtension === 'mp4' || fileExtension === 'webm') {
+    if (['mp4', 'webm'].includes(fileExtension)) {
       return <video src={mediaUrl} className="w-full h-64 object-cover hover:opacity-90 transition-opacity duration-300" controls />;
     }
 
-    if (fileExtension === 'mp3' || fileExtension === 'wav') {
-      return <audio src={mediaUrl} className="w-full h-16 object-cover hover:opacity-90 transition-opacity duration-300" controls />;
+    if (['mp3', 'wav'].includes(fileExtension)) {
+      return <audio src={mediaUrl} className="w-full mt-2" controls />;
     }
 
     return null;
   };
 
   if (!profile) {
-    return <div>Loading...</div>;
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      <MenuPage />
-      <div className="flex flex-col items-center w-full p-4 bg-gray-100">
-        <div className="bg-white rounded-lg shadow-lg w-full max-w-4xl p-6">
+    <div className="flex flex-col md:flex-row min-h-screen bg-gray-100">
+      <MenuPage className="md:w-1/4 w-full fixed md:relative bottom-0 bg-white shadow-md" />
+      <div className="flex-1 p-4 md:ml-1/4">
+        <div className="bg-white rounded-lg shadow-lg w-full max-w-5xl mx-auto p-6">
           {/* User Info Section */}
-          <div className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6">
+          <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
             <img
               src={profile.avatar}
               className="w-32 h-32 rounded-full border-4 border-blue-500 object-cover"
@@ -160,50 +157,62 @@ const UserProfile = () => {
             />
             <div className="flex flex-col items-center md:items-start">
               <h1 className="text-3xl font-semibold mb-1">{profile.userName}</h1>
-              <p className="text-gray-700 mb-2">{profile.bio}</p>
-              <div className="flex space-x-4 mb-4">
-                <p className="text-gray-700">Posts: {posts.length}</p>
-                <button
-                  className="text-gray-700 underline"
-                  onClick={() => fetchUserList('followers')}
-                >
-                  Followers: {profile.followers.length}
-                </button>
-                <button
-                  className="text-gray-700 underline"
-                  onClick={() => fetchUserList('following')}
-                >
-                  Following: {profile.following.length}
-                </button>
-              </div>
+              <p className="text-gray-700 mb-2 text-center md:text-left">{profile.bio}</p>
+
+              <div className="flex space-x-8 mb-4">
+  {/* Followers */}
+  <button
+    className="flex items-center space-x-2 text-gray-700 hover:text-blue-500 transition-colors duration-200"
+    onClick={() => fetchUserList('followers')}
+  >
+    <span className="flex items-center justify-center w-8 h-8 bg-blue-100 text-blue-600 rounded-full text-sm font-semibold">
+      {profile.followers.length}
+    </span>
+    <span className="text-lg font-medium">Followers</span>
+  </button>
+
+  {/* Following */}
+  <button
+    className="flex items-center space-x-2 text-gray-700 hover:text-blue-500 transition-colors duration-200"
+    onClick={() => fetchUserList('following')}
+  >
+    <span className="flex items-center justify-center w-8 h-8 bg-green-100 text-green-600 rounded-full text-sm font-semibold">
+      {profile.following.length}
+    </span>
+    <span className="text-lg font-medium">Following</span>
+  </button>
+</div>
+
 
               {/* Follow/Unfollow Button */}
-              <button
-                onClick={isFollowing ? unfollowUser : followUser}
-                className={`px-6 py-2 font-semibold text-white rounded-md focus:outline-none transition duration-200 ${
-                  isFollowing ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'
-                }`}
-              >
-                {isFollowing ? 'Unfollow' : 'Follow'}
-              </button>
+              <div className="flex space-x-4">
+                <button
+                  onClick={isFollowing ? unfollowUser : followUser}
+                  className={`px-6 py-2 font-semibold text-white rounded-md focus:outline-none transition duration-200 ${
+                    isFollowing ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'
+                  }`}
+                >
+                  {isFollowing ? 'Unfollow' : 'Follow'}
+                </button>
 
-              {/* Chat Button */}
-              <button
-                onClick={startChat}
-                className="mt-4 px-6 py-2 font-semibold text-white bg-green-500 hover:bg-green-600 rounded-md focus:outline-none"
-              >
-                Chat
-              </button>
+                {/* Chat Button */}
+                <button
+                  onClick={startChat}
+                  className="px-6 py-2 font-semibold text-white bg-green-500 hover:bg-green-600 rounded-md focus:outline-none"
+                >
+                  Chat
+                </button>
+              </div>
             </div>
           </div>
 
           {/* Posts Grid */}
-          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {posts.map((p) => (
               <div key={p._id} className="bg-white shadow-md rounded-lg overflow-hidden">
                 {renderMedia(p.image)} {/* Render media here */}
                 <div className="p-4">
-                  <p className="text-gray-800 font-semibold text-lg">{p.caption}</p>
+                  <p className="text-gray-800 font-semibold text-lg truncate">{p.caption}</p>
                   <p className="text-sm text-gray-500 mt-2">Likes: {p.likes.length}</p>
                   <button
                     className="mt-4 w-full text-blue-500 hover:bg-blue-50"

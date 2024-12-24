@@ -1,6 +1,6 @@
 [build]
-  command = "npm run build"
-  publish = "build"
+  command = "npm run build" # Adjust if you're using a different build command
+  publish = "dist" # Change this to "build" if you're using React
 
 [[redirects]]
   from = "/*"

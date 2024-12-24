@@ -3,11 +3,12 @@ import axios from 'axios';
 import { Button } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import DeleteIcon from '@mui/icons-material/Delete';
+import CommentIcon from '@mui/icons-material/Comment';
 import { Link } from 'react-router-dom';
 import MenuPage from './MenuPage';
 import CommentsModal from './CommentsModal';
 import UserListModal from './UserListModal';
-import { UserContext } from '../contexts/UserContext';
+import UserContext from '../contexts/UserContext';
 
 const Profile = () => {
   const { loggedInUser } = useContext(UserContext);
@@ -81,7 +82,7 @@ const Profile = () => {
   const renderMedia = (mediaUrl) => {
     if (!mediaUrl) return null;
     const fileExtension = mediaUrl.split('.').pop().toLowerCase();
-    
+
     if (fileExtension === 'jpg' || fileExtension === 'jpeg' || fileExtension === 'png' || fileExtension === 'gif') {
       return <img src={mediaUrl} alt="media" className="w-full h-64 object-cover hover:opacity-90 transition-opacity duration-300" />;
     }
@@ -98,82 +99,95 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen flex bg-gray-100">
-      <MenuPage />
-      <div className="flex-grow p-6 ml-60">
-        <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6 mt-6">
-          <div className="flex items-center space-x-6">
+    <div className="min-h-screen flex flex-col md:flex-row bg-gray-100 relative">
+      {/* Menu */}
+      <div className="fixed bottom-0 md:relative md:bottom-auto md:w-1/4 w-full z-10">
+        <MenuPage />
+      </div>
+
+      {/* Profile Section */}
+      <div className="flex-grow p-4 md:p-6 md:ml-1/4">
+        <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">
+          <div className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6">
             <img
               src={loggedInUser.avatar}
               alt="avatar"
-              className="w-32 h-32 rounded-full object-cover shadow-md border-2 border-gray-200"
+              className="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover border-4 border-gray-200"
             />
-            <div className="flex-grow">
-              <h1 className="text-3xl font-bold text-gray-800">{loggedInUser.userName}</h1>
-              <p className="text-lg text-gray-600 mt-2">{loggedInUser.bio}</p>
-              <div className="flex space-x-12 mt-6">
+            <div className="flex-grow text-center md:text-left">
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-800">{loggedInUser.userName}</h1>
+              <p className="text-sm md:text-lg text-gray-600 mt-2">{loggedInUser.bio}</p>
+              <div className="flex justify-center md:justify-start space-x-6 mt-4">
                 <div className="text-center">
                   <h2 className="text-lg font-semibold text-gray-700">Posts</h2>
-                  <p className="text-gray-500 text-lg">{post.length}</p>
+                  <p className="text-gray-500">{post.length}</p>
                 </div>
                 <div className="text-center">
-                  <Button
+                  <button
                     onClick={() => handleOpenUserListModal('followers')}
-                    variant="text"
-                    className="text-lg font-semibold text-blue-500"
+                    className="text-lg font-semibold text-blue-500 hover:underline"
                   >
                     Followers
-                  </Button>
-                  <p className="text-gray-500 text-lg">{loggedInUser.followers.length}</p>
+                  </button>
+                  <p className="text-gray-500">{loggedInUser.followers.length}</p>
                 </div>
                 <div className="text-center">
-                  <Button
+                  <button
                     onClick={() => handleOpenUserListModal('following')}
-                    variant="text"
-                    className="text-lg font-semibold text-blue-500"
+                    className="text-lg font-semibold text-blue-500 hover:underline"
                   >
                     Following
-                  </Button>
-                  <p className="text-gray-500 text-lg">{loggedInUser.following.length}</p>
+                  </button>
+                  <p className="text-gray-500">{loggedInUser.following.length}</p>
                 </div>
               </div>
+              <Button
+                variant="text"
+                startIcon={<HomeIcon />}
+                component={Link}
+                to="/users"
+                className="mt-4 text-blue-500 hover:text-blue-700"
+              >
+                Add Friends
+              </Button>
             </div>
           </div>
-          <Button
-            variant="text"
-            startIcon={<HomeIcon />}
-            component={Link}
-            to="/users"
-            className="mt-4 text-blue-500 hover:text-blue-700"
-          >
-            Add Friends
-          </Button>
         </div>
 
         {/* Posts Grid */}
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {post.map((p) => (
             <div key={p._id} className="bg-white shadow-md rounded-lg overflow-hidden">
-              {renderMedia(p.image)}
+              <div className="p-4 flex items-center justify-between border-b">
+                <div className="flex items-center space-x-2">
+                  <img
+                    src={loggedInUser.avatar}
+                    alt="avatar"
+                    className="w-8 h-8 rounded-full object-cover border border-gray-200"
+                  />
+                  <p className="text-gray-800 text-sm font-medium">{loggedInUser.userName}</p>
+                </div>
+              </div>
+              <div className="relative">{renderMedia(p.image)}</div>
               <div className="p-4">
-                <p className="text-gray-800 font-semibold text-lg">{p.caption}</p>
-                <p className="text-sm text-gray-500 mt-2">Likes: {p.likes.length}</p>
-                <Button
-                  variant="outlined"
-                  className="mt-4 w-full text-blue-500 hover:bg-blue-50"
-                  onClick={() => handleViewComments(p)}
-                >
-                  View Comments
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  startIcon={<DeleteIcon />}
-                  className="mt-2 w-full text-red-500 hover:bg-red-50"
-                  onClick={() => handleDeletePost(p._id)}
-                >
-                  Delete
-                </Button>
+                <p className="text-gray-600 text-sm mb-2">{p.caption}</p>
+                <div className="flex justify-between items-center mt-4">
+                  <p className="text-sm text-gray-500">{p.likes.length} likes</p>
+                  <div className="flex space-x-3">
+                    <button
+                      className="text-blue-500 hover:text-blue-700"
+                      onClick={() => handleViewComments(p)}
+                    >
+                      <CommentIcon />
+                    </button>
+                    <button
+                      className="text-red-500 hover:text-red-700"
+                      onClick={() => handleDeletePost(p._id)}
+                    >
+                      <DeleteIcon />
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           ))}

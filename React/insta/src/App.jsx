@@ -13,7 +13,7 @@ import UserProfile from './Components/UserProfile';
 import SearchBar from './Components/SearchBar';
 import Chat from './Components/Chat';
 import { UserProvider } from './contexts/UserContext';
-
+import ProtectedRoute from './Components/ProtectedRoute';
 import Messages from './Components/Messages';
 
 
@@ -23,20 +23,20 @@ function App() {
   
      
     <div className="App">
-      <UserProvider>
+     <UserProvider>
      <Routes>
      <Route path='/' element={<LoginPage/>}></Route>
      <Route path='/signup' element={<SignUp/>}></Route>
-        <Route path='/messages' element={<Messages></Messages>}></Route>
-        <Route path='/homepage' element={<HomePage/>}></Route>
-        <Route path='/profile' element={<Profile/>}></Route>
-        <Route path='/edit' element={<EditProfile/>}></Route>
-        <Route path='/createpost' element={<CreatPost/>}></Route>
-        <Route path='/newspage' element={<NewsPage/>}></Route>
-        <Route path='/users' element={<UserList/>}></Route>
-        <Route path="/users/:userName" element={<UserProfile/>}/>
-        <Route path='search' element={<SearchBar/>}/>
-        <Route path='/chat/:userName' element={<Chat/>}/>
+        <Route path='/messages' element={<ProtectedRoute><Messages></Messages></ProtectedRoute>}></Route>
+        <Route path='/homepage' element={<ProtectedRoute><HomePage/></ProtectedRoute>}></Route>
+        <Route path='/profile' element={<ProtectedRoute><Profile/></ProtectedRoute>}></Route>
+        <Route path='/edit' element={<ProtectedRoute><EditProfile/></ProtectedRoute>}></Route>
+        <Route path='/createpost' element={<ProtectedRoute><CreatPost/></ProtectedRoute>}></Route>
+        <Route path='/newspage' element={<ProtectedRoute><NewsPage/></ProtectedRoute>}></Route>
+        <Route path='/users' element={<ProtectedRoute><UserList/></ProtectedRoute>}></Route>
+        <Route path="/users/:userName" element={<ProtectedRoute><UserProfile/></ProtectedRoute>}/>
+        <Route path='search' element={<ProtectedRoute><SearchBar/></ProtectedRoute>}/>
+        <Route path='/chat/:userName' element={<ProtectedRoute><Chat/></ProtectedRoute>}/>
       </Routes>  
       </UserProvider>
     </div> 

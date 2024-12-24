@@ -13,8 +13,6 @@ function StoryPage() {
         marginTop:"50px"
     }
 
-
-
   return (
     <div>
         <div style={header}>

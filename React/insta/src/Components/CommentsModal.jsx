@@ -1,10 +1,12 @@
 import React from 'react';
 
+
 const CommentsModal = ({ selectedPost, onClose }) => {
 
     const comments=selectedPost ? selectedPost.comments : []; 
   return (
     <div className="fixed inset-0 bg-gray-700 bg-opacity-50 flex items-center justify-center z-50">
+      
       <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-lg relative">
         <h2 className="text-xl font-semibold mb-4">Comments</h2>
         {/*console.log(post.comments)*/}

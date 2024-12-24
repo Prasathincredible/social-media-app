@@ -7,14 +7,14 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Link, useNavigate } from 'react-router-dom';
-import { UserContext } from '../contexts/UserContext';
+import  UserContext  from '../contexts/UserContext';
 
 function MenuPage() {
-  const { logoutUser } = useContext(UserContext);
+  const { logout } = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logoutUser();
+    logout();
     navigate('/');
   };
 

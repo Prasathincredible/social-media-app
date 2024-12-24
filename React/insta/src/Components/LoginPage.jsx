@@ -1,11 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component, useContext } from 'react';
 import axios from 'axios';
 import { Button } from '@mui/material';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { Link, Navigate } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import UserContext from '../contexts/UserContext';
 
 class LoginPage extends Component {
+
+  static contextType=UserContext
+
   constructor(props) {
     super(props);
     this.state = {
@@ -34,6 +37,11 @@ class LoginPage extends Component {
           modalMessage: 'Login successful! Welcome back.',
         });
         localStorage.setItem('token', data.user);
+
+        const {setLoggedInUser}=this.context
+
+        setLoggedInUser(data.user);
+
         setTimeout(() => {
           this.setState({ redirectToHome: true }); // Set state to redirect after success
         }, 3000); // Wait for 3 seconds before redirecting
