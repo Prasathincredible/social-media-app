@@ -2,7 +2,7 @@ const express=require('express')
 const mongoose=require('mongoose');
 const Profile=require('./models/mongodb');
 const PostModel=require('./models/postModel');
-
+const authenticateToken=require('./middlewares/authenticateToken'); 
 const Message=require('./models/messages');
 const messageRoutes=require('./routes/messages');
 const { Server }=require('socket.io');
@@ -24,7 +24,7 @@ const app=express();
 const server=http.createServer(app);
 const io=new Server(server,{
     cors:{
-        origin:"https://instavillage.netlify.app",
+        origin:"http://localhost:3000",
         methods:['GET','POST','OPTIONS'],
         allowedHeaders:['Content-Type', 'Authorization'],
     }
@@ -107,7 +107,7 @@ const storage = new CloudinaryStorage({
 const upload=multer({storage:storage});
 
 app.post('/signup',upload.single('avatar'), async(req, res) => {
-    console.log(req.body)
+    //console.log(req.body)
     try{
         const newPassword=await bcrypt.hash(req.body.password, 10)
         await Profile.create({
@@ -127,8 +127,7 @@ app.post('/signup',upload.single('avatar'), async(req, res) => {
 
 
 app.post('/api/login', async (req, res) => {
-   // console.log(req.body)
-
+   //console.log(req.body)
        const user= await Profile.findOne({
             userName:req.body.userName
         })
@@ -156,14 +155,11 @@ app.post('/api/login', async (req, res) => {
 })
 
 
-app.get('/profile', async(req,res)=>{
+app.get('/profile', authenticateToken, async(req,res)=>{
     try
     {
-        const token=req.headers.authorization.split(" ")[1];
-        //console.log(token);
-        const decoded=jwt.verify(token,process.env.JWT_SECRET);
-        //console.log(decoded.userName)
-        const userName=await Profile.findOne({userName:decoded.userName})
+        //console.log(req.user)
+        const userName=await Profile.findOne({userName:req.user.userName})
         if(!userName)
         {
             return res.status(404).json({message:"User not found"});
@@ -179,7 +175,7 @@ app.get('/profile', async(req,res)=>{
 });
 
 
-app.post('/upload',upload.single('file'),(req,res)=>{
+app.post('/upload',upload.single('file'),authenticateToken,(req,res)=>{
 
     //console.log(req.file);
     //console.log(req.body.caption)
@@ -187,9 +183,8 @@ app.post('/upload',upload.single('file'),(req,res)=>{
     {
         return res.status(400).send('File and caption are required');
     }
-    const token=req.headers.authorization.split(' ')[1];
-    const decoded=jwt.verify(token,process.env.JWT_SECRET)
-    const userName=decoded.userName;
+
+    const userName=req.user.userName;
 
     try
     {
@@ -211,11 +206,10 @@ catch(err)
 });
 
 
-app.get('/poster',(req,res)=>{
+app.get('/poster',authenticateToken,(req,res)=>{
 
-    const token=req.headers.authorization.split(' ')[1];
-    const decoded=jwt.verify(token,process.env.JWT_SECRET)
-    const userName=decoded.userName;
+
+    const userName=req.user.userName;
 
     PostModel.find({userName:userName})
     .then((result)=>res.json(result))
@@ -309,14 +303,14 @@ app.post('/posts/:id/comment', async(req,res)=>{
 })
 
 
-app.post('/follow',async (req,res)=>{
+app.post('/follow',authenticateToken, async (req,res)=>{
     const followUserId=req.body.followId;
     //console.log(followUserId);
-    const token=req.headers.authorization?.split(" ")[1];
+
 
     try{
-        const decoded=jwt.verify(token,process.env.JWT_SECRET);
-        const loggedInUser=await Profile.findOne({userName: decoded.userName})
+    
+        const loggedInUser=await Profile.findOne({userName: req.user.userName})
        // console.log(loggedInUser)
 
         if(loggedInUser.following.includes(followUserId)===false){
@@ -344,23 +338,20 @@ app.post('/follow',async (req,res)=>{
 })
 
 
-app.post('/unfollow',async (req,res)=>{
+app.post('/unfollow',authenticateToken,async (req,res)=>{
     const unfollowUserName=req.body.unfollowId;
     
     //console.log(unfollowUserName)
 
-    const token=req.headers.authorization.split(" ")[1];
 
     try{
-        const decoded=jwt.verify(token,process.env.JWT_SECRET);
-        const loggedInUser=await Profile.findOne({userName: decoded.userName})
 
+        const loggedInUser=await Profile.findOne({userName: req.user.userName})
 
         if(loggedInUser.following.includes(unfollowUserName)){
         
             loggedInUser.following=loggedInUser.following.filter(userName=> userName !==unfollowUserName);
             await loggedInUser.save();
-
             const unfollowUser=await Profile.findOne({userName: unfollowUserName});
             console.log(unfollowUser.userName)
             unfollowUser.followers=unfollowUser.followers.filter(userName=> userName !==loggedInUser.userName);
@@ -403,7 +394,6 @@ app.get('/search', async(req,res)=>{
 app.get('/profile/followers', async (req, res) => {
     const { askedUser } = req.query; 
 
-    //console.log(askedUser)
 
     try {
         
@@ -413,7 +403,6 @@ app.get('/profile/followers', async (req, res) => {
         }
 
 
-        //console.log(user.followers)
         res.json({ followers: user.followers });
     } catch (error) {
         console.error(error);
@@ -443,13 +432,10 @@ app.get('/profile/following', async (req, res) => {
     }
 });
 
-app.delete('/posts/:id', async(req,res)=>{
-
-    const token=req.headers.authorization.split(" ")[1];
-    const decoded=jwt.verify(token,process.env.JWT_SECRET);
-    const loggedInUser=decoded.userName;
+app.delete('/posts/:id',authenticateToken, async(req,res)=>{
 
 
+    const loggedInUser=req.user.userName;
     try{
         const post =await PostModel.findById(req.params.id)
         if(!post){
@@ -471,9 +457,9 @@ app.delete('/posts/:id', async(req,res)=>{
 })
 
 
-
 app.use('/users',userRouter)
 app.use('/conversations',messageRoutes)
+app.use(authenticateToken)
 
 
 server.listen(3000,()=>{

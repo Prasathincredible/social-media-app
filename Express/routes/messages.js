@@ -8,7 +8,7 @@ router.use(express.json())
 
 router.get('/', async (req, res) => {
     const { sender, receiver } = req.query;
-
+  
     try {
         const existingConversation = await Conversation.findOne({
             $or: [
@@ -99,6 +99,7 @@ module.exports = router;
 
 router.get('/:user1/:user2', async(req,res)=>{
     const {user1, user2}=req.params;
+    //console.log(user1+" "+user2)
 
     try{
         const messages=await Message.find({
@@ -120,7 +121,6 @@ router.get('/:user1/:user2', async(req,res)=>{
         res.status(500).json({error: 'Failed to fetch messages'});
     }
 })
-
 
 
 module.exports=router;
