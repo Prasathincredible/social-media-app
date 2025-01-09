@@ -6,7 +6,6 @@ const UserContext = createContext(null);
 export const UserProvider = ({ children }) => {
   const [loggedInUser, setLoggedInUser] = useState(null);
 
-
   const setUserFromToken = async (token) => {
     try {
       console.log(loggedInUser)
@@ -19,7 +18,6 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  
   const logout = () => {
     localStorage.removeItem('token'); 
     setLoggedInUser(null); 
