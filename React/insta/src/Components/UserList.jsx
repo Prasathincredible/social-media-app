@@ -37,11 +37,12 @@ function UserList() {
       <div className="lg:w-3/4 w-full p-6 lg:mt-0 mt-20 relative">
         {/* ✅ Back Button */}
         <button
-          onClick={() => navigate(-1)}
-          className="mb-4 px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition-colors duration-200 absolute top-0 right-0"
-        >
-          ← Back
-        </button>
+  onClick={() => navigate(-1)}
+  className="absolute top-4 left-4 text-blue-500 hover:text-blue-700 z-20"
+>
+  ← Back
+</button>
+
 
         <h2 className="text-2xl font-semibold mb-8 text-gray-700">User List</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
