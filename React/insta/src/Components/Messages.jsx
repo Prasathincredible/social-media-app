@@ -38,9 +38,12 @@ function Messages() {
 
       {/* Back Button */}
       <div className="mb-4 self-start ml-6">
-        <Button variant="outlined" color="secondary" onClick={goBack}>
-          Back
-        </Button>
+        <button
+  onClick={() => navigate(-1)}
+  className="absolute top-4 left-4 text-blue-500 hover:text-blue-700 z-20"
+>
+  ← Back
+</button>
       </div>
 
       <h1 className="text-2xl font-semibold mb-4">Conversations</h1>

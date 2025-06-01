@@ -91,15 +91,12 @@ function CreatePost() {
         
         {/* Back Button */}
         <div className="mb-4">
-          <Button
-            variant="outlined"
-            color="secondary"
-            onClick={goBack}
-            disabled={loading}
-            className="w-full"
-          >
-            Back
-          </Button>
+          <button
+  onClick={() => navigate(-1)}
+  className="absolute top-4 left-4 text-blue-500 hover:text-blue-700 z-20"
+>
+  ← Back
+</button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">

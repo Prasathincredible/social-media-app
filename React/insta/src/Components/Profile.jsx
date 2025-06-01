@@ -117,14 +117,12 @@ const Profile = () => {
 
           {/* 👇 Back Button */}
           <div className="mb-4">
-            <Button
-              variant="outlined"
-              startIcon={<ArrowBackIcon />}
-              onClick={handleBack}
-              color="primary"
-            >
-              Back
-            </Button>
+           <button
+  onClick={() => navigate(-1)}
+  className="absolute top-4 left-4 text-blue-500 hover:text-blue-700 z-20"
+>
+  ← Back
+</button>
           </div>
 
           <div className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6">

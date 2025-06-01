@@ -77,11 +77,11 @@ const Chat = () => {
       {/* Header with Back Button */}
       <div className="flex items-center justify-between p-4 bg-[#252537] text-white border-b border-gray-700 shadow">
         <button
-          onClick={() => navigate(-1)}
-          className="px-3 py-1 text-sm bg-gray-700 rounded hover:bg-gray-600 transition"
-        >
-          ← Back
-        </button>
+  onClick={() => navigate(-1)}
+  className="absolute top-4 left-4 text-blue-500 hover:text-blue-700 z-20"
+>
+  ← Back
+</button>
         <h2 className="text-lg font-semibold">{receiverUserName}</h2>
         <div className="w-16">{/* Empty space to balance layout */}</div>
       </div>

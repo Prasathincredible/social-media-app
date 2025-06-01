@@ -150,12 +150,12 @@ const UserProfile = () => {
         <div className="bg-white rounded-lg shadow-lg w-full max-w-5xl mx-auto p-6">
           {/* Back Button */}
           <div className="flex justify-end mb-4">
-            <button
-              onClick={() => navigate(-1)}
-              className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition"
-            >
-              ← Back
-            </button>
+              <button
+  onClick={() => navigate(-1)}
+  className="absolute top-4 left-4 text-blue-500 hover:text-blue-700 z-20"
+>
+  ← Back
+</button>
           </div>
 
           {/* User Info Section */}
