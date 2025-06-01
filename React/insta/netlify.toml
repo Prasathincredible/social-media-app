@@ -1,7 +1,3 @@
-[build]
-  base = "React/insta"
-  publish = "React/insta/dist"
-  command = "npm install && npm run build"
 
 [[redirects]]
   from = "/*"
