@@ -1,8 +1,9 @@
 import { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import UserContext  from '../contexts/UserContext';
+import UserContext from '../contexts/UserContext';
 import MenuPage from './MenuPage';
+import { Button } from '@mui/material';
 
 function Messages() {
   const [conversations, setConversations] = useState([]);
@@ -27,11 +28,23 @@ function Messages() {
     navigate(`/chat/${otherUser}`);
   };
 
+  const goBack = () => {
+    navigate(-1); // Go to previous page
+  };
+
   return (
-    
     <div className="flex flex-col items-center py-6">
-      <MenuPage/>
+      <MenuPage />
+
+      {/* Back Button */}
+      <div className="mb-4 self-start ml-6">
+        <Button variant="outlined" color="secondary" onClick={goBack}>
+          Back
+        </Button>
+      </div>
+
       <h1 className="text-2xl font-semibold mb-4">Conversations</h1>
+
       <ul className="w-full max-w-md">
         {conversations.map((conversation) => {
           const otherUser = conversation.sender === loggedInUser.userName ? conversation.receiver : conversation.sender;

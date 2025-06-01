@@ -4,7 +4,8 @@ import { Button } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CommentIcon from '@mui/icons-material/Comment';
-import { Link } from 'react-router-dom';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // 👈 Import back icon
+import { Link, useNavigate } from 'react-router-dom'; // 👈 Import useNavigate
 import MenuPage from './MenuPage';
 import CommentsModal from './CommentsModal';
 import UserListModal from './UserListModal';
@@ -18,6 +19,7 @@ const Profile = () => {
   const [isUserListModalOpen, setIsUserListModalOpen] = useState(false);
   const [userList, setUserList] = useState([]);
   const [listType, setListType] = useState('');
+  const navigate = useNavigate(); // 👈 Initialize navigate
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -75,6 +77,10 @@ const Profile = () => {
     }
   };
 
+  const handleBack = () => {
+    navigate(-1); // 👈 Go back one page
+  };
+
   if (!loggedInUser) {
     return <div>Loading...</div>;
   }
@@ -83,15 +89,15 @@ const Profile = () => {
     if (!mediaUrl) return null;
     const fileExtension = mediaUrl.split('.').pop().toLowerCase();
 
-    if (fileExtension === 'jpg' || fileExtension === 'jpeg' || fileExtension === 'png' || fileExtension === 'gif') {
+    if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)) {
       return <img src={mediaUrl} alt="media" className="w-full h-64 object-cover hover:opacity-90 transition-opacity duration-300" />;
     }
 
-    if (fileExtension === 'mp4' || fileExtension === 'webm') {
+    if (['mp4', 'webm'].includes(fileExtension)) {
       return <video src={mediaUrl} className="w-full h-64 object-cover hover:opacity-90 transition-opacity duration-300" controls />;
     }
 
-    if (fileExtension === 'mp3' || fileExtension === 'wav') {
+    if (['mp3', 'wav'].includes(fileExtension)) {
       return <audio src={mediaUrl} className="w-full h-16 object-cover hover:opacity-90 transition-opacity duration-300" controls />;
     }
 
@@ -108,6 +114,19 @@ const Profile = () => {
       {/* Profile Section */}
       <div className="flex-grow p-4 md:p-6 md:ml-1/4">
         <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">
+
+          {/* 👇 Back Button */}
+          <div className="mb-4">
+            <Button
+              variant="outlined"
+              startIcon={<ArrowBackIcon />}
+              onClick={handleBack}
+              color="primary"
+            >
+              Back
+            </Button>
+          </div>
+
           <div className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6">
             <img
               src={loggedInUser.avatar}

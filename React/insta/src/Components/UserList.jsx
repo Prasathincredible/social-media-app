@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ButtonBase } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // ✅ import useNavigate
 import MenuPage from './MenuPage';
 
 function UserList() {
   const [users, setUsers] = useState([]);
+  const navigate = useNavigate(); // ✅ Initialize navigate
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -33,8 +34,16 @@ function UserList() {
       </div>
 
       {/* User List */}
-      <div className="lg:w-3/4 w-full p-6 lg:mt-0 mt-20">
-        <h2 className="text-2xl font-semibold mb-4 text-gray-700">User List</h2>
+      <div className="lg:w-3/4 w-full p-6 lg:mt-0 mt-20 relative">
+        {/* ✅ Back Button */}
+        <button
+          onClick={() => navigate(-1)}
+          className="mb-4 px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition-colors duration-200 absolute top-0 right-0"
+        >
+          ← Back
+        </button>
+
+        <h2 className="text-2xl font-semibold mb-8 text-gray-700">User List</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {users.map((user) => (
             <div

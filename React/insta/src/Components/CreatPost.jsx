@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Button } from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 import MenuPage from './MenuPage';
 
 function CreatePost() {
@@ -10,6 +10,7 @@ function CreatePost() {
   const [posts, setPost] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -26,6 +27,8 @@ function CreatePost() {
     formData.append('caption', caption);
     const token = localStorage.getItem('token');
 
+    setLoading(true);
+
     axios.post('https://social-media-app-kamd.onrender.com/upload', formData, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -35,16 +38,18 @@ function CreatePost() {
       .then((res) => {
         setAlertMessage('Post created successfully');
         setShowAlert(true);
-        const updatedPosts = [...posts, res.data];
-        setPost(updatedPosts);
+        setPost(prev => [...prev, res.data]);
         setTimeout(() => {
           navigate('/homepage');
-        }, 2000); // Redirect after 2 seconds
+        }, 2000);
       })
       .catch((err) => {
         setAlertMessage('Error creating post. Please try again.');
         setShowAlert(true);
         console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -52,9 +57,14 @@ function CreatePost() {
     setShowAlert(false);
   };
 
+  const goBack = () => {
+    navigate(-1); // Go to previous page
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-200 to-green-100 flex flex-col items-center justify-center py-8">
-      <MenuPage/>
+      <MenuPage />
+
       {showAlert && (
         <div className="fixed top-0 left-0 right-0 z-50 flex justify-center">
           <div className="bg-white rounded-lg shadow-lg p-4 max-w-sm w-full mt-4">
@@ -70,8 +80,28 @@ function CreatePost() {
           </div>
         </div>
       )}
-      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full space-y-6">
+
+      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full space-y-6 relative">
+        {loading && (
+          <div className="absolute inset-0 bg-white bg-opacity-70 flex items-center justify-center z-10">
+            <CircularProgress />
+          </div>
+        )}
         <h1 className="text-4xl font-bold text-center text-blue-600 mb-6">Create Post</h1>
+        
+        {/* Back Button */}
+        <div className="mb-4">
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={goBack}
+            disabled={loading}
+            className="w-full"
+          >
+            Back
+          </Button>
+        </div>
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <input
@@ -94,8 +124,9 @@ function CreatePost() {
             color="primary"
             type="submit"
             className="w-full py-3 text-lg"
+            disabled={loading}
           >
-            Create Post
+            {loading ? 'Uploading...' : 'Create Post'}
           </Button>
         </form>
       </div>

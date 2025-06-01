@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useParams } from 'react-router-dom';
-import UserContext  from '../contexts/UserContext';
+import { useParams, useNavigate } from 'react-router-dom';
+import UserContext from '../contexts/UserContext';
 import axios from 'axios';
 import io from 'socket.io-client';
 
@@ -17,13 +17,13 @@ const Chat = () => {
   const { loggedInUser } = useContext(UserContext);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        console.log(loggedInUser)
+        console.log(loggedInUser);
         const response = await axios.get(`https://social-media-app-kamd.onrender.com/conversations/${loggedInUser.userName}/${receiverUserName}`);
-
         setMessages(response.data);
       } catch (error) {
         console.log('Error fetching messages: ', error);
@@ -51,7 +51,7 @@ const Chat = () => {
       sender: loggedInUser.userName,
       receiver: receiverUserName,
       text: newMessage,
-      timestamp: new Date().toISOString(), 
+      timestamp: new Date().toISOString(),
     };
 
     socket.emit('send_message', message);
@@ -59,10 +59,9 @@ const Chat = () => {
     setNewMessage('');
   };
 
-  
   const groupMessagesByDate = (messages) => {
     return messages.reduce((acc, message) => {
-      const date = new Date(message.timestamp).toLocaleDateString(); 
+      const date = new Date(message.timestamp).toLocaleDateString();
       if (!acc[date]) {
         acc[date] = [];
       }
@@ -75,10 +74,19 @@ const Chat = () => {
 
   return (
     <div className="flex flex-col h-screen bg-[#1E1E2C] text-gray-100">
+      {/* Header with Back Button */}
       <div className="flex items-center justify-between p-4 bg-[#252537] text-white border-b border-gray-700 shadow">
+        <button
+          onClick={() => navigate(-1)}
+          className="px-3 py-1 text-sm bg-gray-700 rounded hover:bg-gray-600 transition"
+        >
+          ← Back
+        </button>
         <h2 className="text-lg font-semibold">{receiverUserName}</h2>
+        <div className="w-16">{/* Empty space to balance layout */}</div>
       </div>
 
+      {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {Object.keys(messagesByDate).map((date, index) => (
           <div key={index}>
@@ -106,6 +114,7 @@ const Chat = () => {
         ))}
       </div>
 
+      {/* Message Input */}
       <div className="p-4 bg-[#252537] border-t border-gray-700 flex items-center gap-3">
         <input
           type="text"
@@ -125,4 +134,4 @@ const Chat = () => {
   );
 };
 
-export default Chat
+export default Chat;
