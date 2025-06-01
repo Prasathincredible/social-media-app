@@ -3,7 +3,6 @@
   publish = "React/insta/dist"
   command = "npm install && npm run build"
 
-
 [[redirects]]
   from = "/*"
   to = "/index.html"
